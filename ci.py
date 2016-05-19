@@ -1,8 +1,8 @@
 import os
 import sys
 import vagrant
-from contextlib import contextmanager
 from urllib import urlretrieve
+from contextlib import contextmanager
 
 VAGRANTFILE_VERSION = "834e48942903e7c1069bbdae278888a078201bc3"
 
