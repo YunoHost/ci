@@ -58,6 +58,13 @@ def main():
         sys.stderr.write("You might want to run a vagrant destroy testing but be aware that this will DESTROY your modified vm.")
         sys.exit(1)
 
+    with debug_message("Getting yunohost version"):
+        v.snapshot_restore("postinstalled")
+        with settings(host_string=v.user_hostname_port(vm_name="testing"),
+                      key_filename=v.keyfile(vm_name="testing"),
+                      disable_known_hosts=True):
+            yunohost_version = json.loads(sudo("yunohost --version --output-as json"))
+
     app_list = json.load(urlopen("https://app.yunohost.org/official.json"))
 
     for name, data in sorted(app_list.items(), key=lambda x: x[0]):
