@@ -53,10 +53,6 @@ def main():
         sys.stderr.write("Error: testing vm has already been created and I can't find a postinstalled snapshot, this is an inconsistante state, I don't know what to do, abort.")
         sys.exit(1)
 
-    if starting_state == "running":
-        with debug_message("Halting the testing vm before starting to work"):
-            v.halt("testing")
-
     app_list = json.load(urlopen("https://app.yunohost.org/official.json"))
 
 
