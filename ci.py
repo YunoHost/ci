@@ -54,7 +54,8 @@ def main():
             v.snapshot_save("postinstalled")
 
     if "postinstalled" not in v.snapshot_list():
-        sys.stderr.write("Error: testing vm has already been created and I can't find a postinstalled snapshot, this is an inconsistante state, I don't know what to do, abort.")
+        sys.stderr.write("Error: testing vm has already been created and I can't find a postinstalled snapshot, this is an inconsistante state, I don't know what to do, abort.\n")
+        sys.stderr.write("You might want to run a vagrant destroy testing but be aware that this will DESTROY your modified vm.")
         sys.exit(1)
 
     app_list = json.load(urlopen("https://app.yunohost.org/official.json"))
