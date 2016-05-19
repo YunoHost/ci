@@ -42,6 +42,7 @@ def main():
                 sudo("apt-get upgrade -y")
                 sudo("apt-get dist-upgrade -y")
                 sudo("yunohost tools postinstall -d ynh.local -p ynh")
+                sudo("yunohost user create johndoe -f John -l Doe -m john.doe@ynh.local -q 0 -p ynh")
 
         with debug_message("Halting vm to do a snapshot"):
             v.halt("testing")
