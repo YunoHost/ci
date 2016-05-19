@@ -45,6 +45,10 @@ def main():
         with debug_message("Saving a snapshot"):
             v.snapshot_save("postinstalled")
 
+    if "postinstalled" not in v.snapshot_list():
+        sys.stderr.write("Error: testing vm has already been created and I can't find a postinstalled snapshot, this is an inconsistante state, I don't know what to do, abort.")
+        sys.exit(1)
+
 
 if __name__ == '__main__':
     main()
