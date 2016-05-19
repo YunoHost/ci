@@ -7,6 +7,9 @@ from contextlib import contextmanager
 
 from fabric.api import settings, sudo
 
+from default_args import default_arguments_for_app
+
+
 VAGRANTFILE_VERSION = "834e48942903e7c1069bbdae278888a078201bc3"
 
 @contextmanager
@@ -64,7 +67,7 @@ def main():
             with settings(host_string=v.user_hostname_port(vm_name="testing"),
                           key_filename=v.keyfile(vm_name="testing"),
                           disable_known_hosts=True, ok_ret_codes=range(10000)):
-                result = sudo("yunohost app install %s --verbose" % name)
+                result = sudo("yunohost app install %s --verbose -a \"%s\"" % (name, default_arguments_for_app(data)))
                 print "return code:", result.return_code
 
 
