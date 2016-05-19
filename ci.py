@@ -55,6 +55,16 @@ def main():
 
     app_list = json.load(urlopen("https://app.yunohost.org/official.json"))
 
+    for name, data in sorted(app_list.items(), key=lambda x: x[0]):
+        with debug_message("Restoring snapshot"):
+            v.snapshot_restore("postinstalled")
+
+        with debug_message("Testing %s installation" % name):
+            with settings(host_string=v.user_hostname_port(vm_name="testing"),
+                          key_filename=v.keyfile(vm_name="testing"),
+                          disable_known_hosts=True, ok_ret_codes=range(10000)):
+                result = sudo("yunohost app install %s --verbose" % name)
+                print "return code:", result.return_code
 
 
 if __name__ == '__main__':
