@@ -82,6 +82,7 @@ def main():
             with settings(host_string=v.user_hostname_port(vm_name="testing"),
                           key_filename=v.keyfile(vm_name="testing"),
                           disable_known_hosts=True, ok_ret_codes=range(10000)):
+                sudo("yunohost app fetchlist")
                 start = datetime.now()
                 result = sudo("yunohost app install %s --verbose -a \"%s\"" % (name, default_arguments_for_app(data)))
                 end = datetime.now()
