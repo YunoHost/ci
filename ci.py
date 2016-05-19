@@ -38,6 +38,9 @@ def main():
             with settings(host_string=v.user_hostname_port(vm_name="testing"),
                           key_filename=v.keyfile(vm_name="testing"),
                           disable_known_hosts=True):
+                sudo("apt-get update")
+                sudo("apt-get upgrade -y")
+                sudo("apt-get dist-upgrade -y")
                 sudo("yunohost tools postinstall -d ynh.local -p ynh")
 
         with debug_message("Halting vm to do a snapshot"):
