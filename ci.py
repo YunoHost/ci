@@ -5,7 +5,7 @@ import vagrant
 from urllib import urlretrieve, urlopen
 from contextlib import contextmanager
 
-from fabric.api import settings, run
+from fabric.api import settings, sudo
 
 VAGRANTFILE_VERSION = "834e48942903e7c1069bbdae278888a078201bc3"
 
@@ -38,7 +38,7 @@ def main():
             with settings(host_string=v.user_hostname_port(vm_name="testing"),
                           key_filename=v.keyfile(vm_name="testing"),
                           disable_known_hosts=True):
-                run("sudo yunohost tools postinstall -d ynh.local -p ynh")
+                sudo("yunohost tools postinstall -d ynh.local -p ynh")
 
         with debug_message("Halting vm to do a snapshot"):
             v.halt("testing")
