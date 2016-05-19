@@ -15,7 +15,7 @@ To run you'll probably need the latest version of Vagrant which is just a self c
 For amd64:
 
     wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb
-    sudo dpkg -i vagrant_1.8.1_i686.rpm
+    sudo dpkg -i vagrant_1.8.1_x86_64.deb
 
     # or
 
