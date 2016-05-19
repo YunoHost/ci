@@ -9,11 +9,10 @@ VAGRANTFILE_VERSION = "834e48942903e7c1069bbdae278888a078201bc3"
 @contextmanager
 def debug_message(first, second="done"):
     sys.stdout.write(first)
-    sys.stdout.write(" ...")
+    sys.stdout.write(" ...\r")
     sys.stdout.flush()
     yield
-    sys.stdout.write(" ")
-    sys.stdout.write(second)
+    sys.stdout.write("%s ... %s" % (first, second))
     if not second.endswith("\n"):
         sys.stdout.write("\n")
 
