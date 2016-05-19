@@ -1,2 +1,3 @@
 python-vagrant
 fabric
+ansi2html
