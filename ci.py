@@ -6,8 +6,9 @@ VAGRANTFILE_VERSION = "834e48942903e7c1069bbdae278888a078201bc3"
 
 
 def main():
-    if not os.path.exists("vagrantfile"):
+    if not os.path.exists("vagrantfile") or not os.path.exists(VAGRANTFILE_VERSION):
         urlretrieve("https://raw.githubusercontent.com/YunoHost/Vagrantfile/%s/Vagrantfile" % VAGRANTFILE_VERSION, "Vagrantfile")
+        open(VAGRANTFILE_VERSION, "w").write("")
 
     v = vagrant.Vagrant()
 
