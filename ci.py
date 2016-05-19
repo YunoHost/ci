@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import vagrant
+from datetime import datetime
 from urllib import urlretrieve, urlopen
 from contextlib import contextmanager
 
@@ -67,6 +68,12 @@ def main():
 
     app_list = json.load(urlopen("https://app.yunohost.org/official.json"))
 
+    logs = {
+        "yunohost_version": yunohost_version,
+        "run_started_at": datetime.now().strftime("%F %X"),
+        "apps": {}
+    }
+
     for name, data in sorted(app_list.items(), key=lambda x: x[0]):
         with debug_message("Restoring snapshot"):
             v.snapshot_restore("postinstalled")
@@ -75,9 +82,22 @@ def main():
             with settings(host_string=v.user_hostname_port(vm_name="testing"),
                           key_filename=v.keyfile(vm_name="testing"),
                           disable_known_hosts=True, ok_ret_codes=range(10000)):
+                start = datetime.now()
                 result = sudo("yunohost app install %s --verbose -a \"%s\"" % (name, default_arguments_for_app(data)))
+                end = datetime.now()
                 print "return code:", result.return_code
 
+        logs["apps"][name] = {
+            "output": result,
+            "version": data["git"]["revision"],
+            "return_code": result.return_code,
+            "duration": (end - start).total_seconds(),
+            "list.json_data": data,
+        }
+
+    logs["run_ended_at"] = datetime.now().strftime("%F %X")
+
+    open("logs.json", "w").write(json.dumps(logs, indent=4))
 
 if __name__ == '__main__':
     main()
