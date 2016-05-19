@@ -1,7 +1,8 @@
 import os
 import sys
+import json
 import vagrant
-from urllib import urlretrieve
+from urllib import urlretrieve, urlopen
 from contextlib import contextmanager
 
 from fabric.api import settings, run
@@ -52,6 +53,8 @@ def main():
     if starting_state == "running":
         with debug_message("Halting the testing vm before starting to work"):
             v.halt("testing")
+
+    app_list = json.load(urlopen("https://app.yunohost.org/official.json"))
 
 
 
