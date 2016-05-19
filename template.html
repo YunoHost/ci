@@ -29,7 +29,7 @@
                 <div class="panel-heading" role="tab" id="heading{{ name }}">
                     <h4 class="panel-title">
                         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ name }}" aria-expanded="false" aria-controls="collapse{{ name }}">
-                            <b>{% if app.return_code == 22 %}[INCOMPATIBLE]{% elif app.return_code != 0 %}[BROKEN]{% endif %}</b>
+                            <span class="label label-danger">{% if app.return_code == 22 %}incompatible{% elif app.return_code != 0 %}broken{% endif %}</span>
                             {{ name }} - {{ app.version }}
                         </a>
                     </h4>
