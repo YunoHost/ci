@@ -34,8 +34,11 @@ def argument_for_question(question, all_choices=False):
 
             return (question["name"], question["default"])
         else:
-            if isinstance(question["default"], bool):
+            if isinstance(question["default"], bool) :
                 return (question["name"], "Yes", "No")
+
+            if question.get("choices"):
+                return (question["name"],) + tuple(question["choices"])
 
             return (question["name"], question["default"])
     elif question_type == "password":
