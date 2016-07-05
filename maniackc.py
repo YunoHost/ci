@@ -9,4 +9,4 @@ if __name__ == '__main__':
     manifest = json.load(open(manifest_path, "r"))
 
     for question in manifest["arguments"]["install"]:
-        print ":".join(argument_for_question(question))
+        print ":".join(argument_for_question(question, all_choices=True))

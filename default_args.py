@@ -3,7 +3,7 @@ import json
 from urllib import urlretrieve
 
 
-def argument_for_question(question):
+def argument_for_question(question, all_choices=False):
     question_type = question.get("type")
 
     if question_type is None and question.get("choices"):
@@ -17,16 +17,27 @@ def argument_for_question(question):
 
     if question_type == "domain":
         return (question["name"], "ynh.local")
-    elif question_type in ("path", "with_default"):
+    elif question_type == "path":
+        if all_choices:
+            return (question["name"], question["default"], "/")
+        else:
+            return (question["name"], question["default"])
+    elif question_type == "with_default":
         return (question["name"], question["default"])
     elif question_type == "boolean":
-        if isinstance(question["default"], bool):
-            if question["default"]:
-                question["default"] = "Yes"
-            else:
-                question["default"] = "No"
+        if not all_choices:
+            if isinstance(question["default"], bool):
+                if question["default"]:
+                    question["default"] = "Yes"
+                else:
+                    question["default"] = "No"
 
-        return (question["name"], question["default"])
+            return (question["name"], question["default"])
+        else:
+            if isinstance(question["default"], bool):
+                return (question["name"], "Yes", "No")
+
+            return (question["name"], question["default"])
     elif question_type == "password":
         return (question["name"], "ynh")
     elif question_type == "user":
