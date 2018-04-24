@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import vagrant
+import traceback
 from urllib import urlretrieve
 from contextlib import contextmanager
 
@@ -61,6 +62,34 @@ def main():
                       key_filename=v.keyfile(vm_name="testing"),
                       disable_known_hosts=True):
             yunohost_version = json.loads(sudo("yunohost --version --output-as json"))
+
+
+    for test in os.listdir("tests"):
+        # only handle test_*.py files
+        if not test.endswith(".py") or not test.startswith("test_"):
+            continue
+
+        # quote from doc
+        # When importing a module from a package, note that __import__('A.B', ...)
+        # returns package A when fromlist is empty, but its submodule B when
+        # fromlist is not empty.
+        # so we put garbage in fromlist to have this behavior
+        test = __import__("tests.%s" % test[:-len(".py")], fromlist=["a"])
+
+        for test_function in dir(test):
+            if not test_function.startswith("test_"):
+                continue
+
+            sys.stdout.write("%s.%s...\r" % (test.__name__, test_function))
+            sys.stdout.flush()
+            try:
+                getattr(test, test_function)()
+            except Exception as e:
+                sys.stdout.write("FAILED\n")
+                traceback.print_exc()
+                print e
+            else:
+                sys.stdout.write("SUCESS\n")
 
 
 if __name__ == '__main__':
