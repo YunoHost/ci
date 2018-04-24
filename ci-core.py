@@ -42,7 +42,7 @@ def main():
                 sudo("apt-get update")
                 sudo("DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade -qq")
                 sudo("yunohost tools postinstall -d ynh.local -p ynh")
-                sudo("yunohost user create johndoe -f John -l Doe -m john.doe@ynh.local -q 0 -p ynh")
+                sudo("yunohost user create johndoe -f John -l Doe -m john.doe@ynh.local -q 0 -p ynh --admin-password ynh")
 
         with debug_message("Halting vm to do a snapshot"):
             v.halt("testing")
