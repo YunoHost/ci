@@ -40,8 +40,7 @@ def main():
                           key_filename=v.keyfile(vm_name="testing"),
                           disable_known_hosts=True):
                 sudo("apt-get update")
-                sudo("apt-get upgrade -y")
-                sudo("apt-get dist-upgrade -y")
+                sudo("DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade -qq")
                 sudo("yunohost tools postinstall -d ynh.local -p ynh")
                 sudo("yunohost user create johndoe -f John -l Doe -m john.doe@ynh.local -q 0 -p ynh")
 
