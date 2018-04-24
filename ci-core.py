@@ -8,8 +8,7 @@ from contextlib import contextmanager
 from fabric.api import settings, sudo
 
 
-
-VAGRANTFILE_VERSION = "834e48942903e7c1069bbdae278888a078201bc3"
+VAGRANTFILE_VERSION = "88ff9f40f30c132bfb482c057050f5bdcf37d379"
 
 @contextmanager
 def debug_message(first, second="done"):
