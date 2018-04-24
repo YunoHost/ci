@@ -2,13 +2,11 @@ import os
 import sys
 import json
 import vagrant
-from datetime import datetime
-from urllib import urlretrieve, urlopen
+from urllib import urlretrieve
 from contextlib import contextmanager
 
 from fabric.api import settings, sudo
 
-from default_args import default_arguments_for_app
 
 
 VAGRANTFILE_VERSION = "834e48942903e7c1069bbdae278888a078201bc3"
