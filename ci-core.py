@@ -30,15 +30,15 @@ def main():
 
     v = vagrant.Vagrant()
 
-    starting_state = v.status("testing")[0].state
+    starting_state = v.status("unstable")[0].state
 
     if starting_state == "not_created":
-        with debug_message("Testing vm not created, vagrant up-ing it"):
-            v.up(vm_name="testing")
+        with debug_message("Unstable vm not created, vagrant up-ing it"):
+            v.up(vm_name="unstable")
 
-        with debug_message("Testing vm created for the first time, starting postinstall"):
-            with settings(host_string=v.user_hostname_port(vm_name="testing"),
-                          key_filename=v.keyfile(vm_name="testing"),
+        with debug_message("unstable vm created for the first time, starting postinstall"):
+            with settings(host_string=v.user_hostname_port(vm_name="unstable"),
+                          key_filename=v.keyfile(vm_name="unstable"),
                           disable_known_hosts=True):
                 sudo("apt-get update")
                 sudo("DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade -qq")
@@ -46,20 +46,20 @@ def main():
                 sudo("yunohost user create johndoe -f John -l Doe -m john.doe@ynh.local -q 0 -p ynh --admin-password ynh")
 
         with debug_message("Halting vm to do a snapshot"):
-            v.halt("testing")
+            v.halt("unstable")
 
         with debug_message("Saving a snapshot"):
-            v.snapshot_save("postinstalled")
+            v.snapshot_save("unstable", "postinstalled")
 
     if "postinstalled" not in v.snapshot_list():
-        sys.stderr.write("Error: testing vm has already been created and I can't find a postinstalled snapshot, this is an inconsistante state, I don't know what to do, abort.\n")
-        sys.stderr.write("You might want to run a vagrant destroy testing but be aware that this will DESTROY your modified vm.")
+        sys.stderr.write("Error: unstable vm has already been created and I can't find a postinstalled snapshot, this is an inconsistante state, I don't know what to do, abort.\n")
+        sys.stderr.write("You might want to run a vagrant destroy unstable but be aware that this will DESTROY your modified vm.")
         sys.exit(1)
 
     with debug_message("Getting yunohost version"):
-        v.snapshot_restore("postinstalled")
-        with settings(host_string=v.user_hostname_port(vm_name="testing"),
-                      key_filename=v.keyfile(vm_name="testing"),
+        v.snapshot_restore("unstable", "postinstalled")
+        with settings(host_string=v.user_hostname_port(vm_name="unstable"),
+                      key_filename=v.keyfile(vm_name="unstable"),
                       disable_known_hosts=True):
             yunohost_version = json.loads(sudo("yunohost --version --output-as json"))
 
