@@ -24,7 +24,7 @@ def debug_message(first, second="done"):
 def main():
     v = vagrant.Vagrant()
 
-    if "vagrant-vbguest" not in {x.anemf for x in v.plugin_list()}:
+    if "vagrant-vbguest" not in {x.name for x in v.plugin_list()}:
         os.system("vagrant plugin install vagrant-vbguest")
 
     starting_state = v.status("unstable")[0].state
