@@ -3,7 +3,6 @@ import sys
 import json
 import vagrant
 import traceback
-from urllib import urlretrieve
 from contextlib import contextmanager
 
 from fabric.api import settings, sudo
@@ -23,12 +22,10 @@ def debug_message(first, second="done"):
 
 
 def main():
-    if not os.path.exists("Vagrantfile") or not os.path.exists(VAGRANTFILE_VERSION):
-        with debug_message("Retreiving Vagrantfile"):
-            urlretrieve("https://raw.githubusercontent.com/YunoHost/Vagrantfile/%s/Vagrantfile" % VAGRANTFILE_VERSION, "Vagrantfile")
-            open(VAGRANTFILE_VERSION, "w").write("")
-
     v = vagrant.Vagrant()
+
+    if "vagrant-vbguest" not in {x.anemf for x in v.plugin_list()}:
+        os.system("vagrant plugin install vagrant-vbguest")
 
     starting_state = v.status("unstable")[0].state
 
