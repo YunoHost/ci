@@ -1,3 +1,3 @@
-python-vagrant
+git+https://github.com/psycojoker/python-vagrant
 fabric
 ansi2html
