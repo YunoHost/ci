@@ -81,7 +81,10 @@ def main():
             sys.stdout.write("%s.%s...\r" % (test.__name__, test_function))
             sys.stdout.flush()
             try:
-                getattr(test, test_function)()
+                with settings(host_string=v.user_hostname_port(vm_name="unstable"),
+                              key_filename=v.keyfile(vm_name="unstable"),
+                              disable_known_hosts=True):
+                    getattr(test, test_function)()
             except Exception as e:
                 sys.stdout.write("FAILED\n")
                 traceback.print_exc()

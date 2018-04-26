@@ -1,5 +1,5 @@
-from ci import command
+from fabric.api import sudo
 
 
 def test_list_domain():
-    command("yunohost domain list")
+    sudo("yunohost domain list")
