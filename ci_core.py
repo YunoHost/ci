@@ -77,9 +77,9 @@ def main():
             if not test_function.startswith("test_"):
                 continue
 
+            v.snapshot_restore("unstable", "postinstalled")
             sys.stdout.write("%s.%s...\r" % (test.__name__, test_function))
             sys.stdout.flush()
-            v.snapshot_restore("unstable", "postinstalled")
             try:
                 getattr(test, test_function)()
             except Exception as e:
