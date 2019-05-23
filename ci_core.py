@@ -27,15 +27,15 @@ def main():
     if "vagrant-vbguest" not in {x.name for x in v.plugin_list()}:
         os.system("vagrant plugin install vagrant-vbguest")
 
-    starting_state = v.status("unstable")[0].state
+    starting_state = v.status("stretch-unstable")[0].state
 
     if starting_state == "not_created":
         with debug_message("Unstable vm not created, vagrant up-ing it"):
-            v.up(vm_name="unstable")
+            v.up(vm_name="stretch-unstable")
 
         with debug_message("unstable vm created for the first time, starting postinstall"):
-            with settings(host_string=v.user_hostname_port(vm_name="unstable"),
-                          key_filename=v.keyfile(vm_name="unstable"),
+            with settings(host_string=v.user_hostname_port(vm_name="stretch-unstable"),
+                          key_filename=v.keyfile(vm_name="stretch-unstable"),
                           disable_known_hosts=True):
                 sudo("apt-get update")
                 sudo("DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade -qq")
@@ -43,10 +43,10 @@ def main():
                 sudo("yunohost user create johndoe -f John -l Doe -m john.doe@ynh.local -q 0 -p ynh --admin-password ynh")
 
         with debug_message("Halting vm to do a snapshot"):
-            v.halt("unstable")
+            v.halt("stretch-unstable")
 
         with debug_message("Saving a snapshot"):
-            v.snapshot_save("unstable", "postinstalled")
+            v.snapshot_save("stretch-unstable", "postinstalled")
 
     if "postinstalled" not in v.snapshot_list():
         sys.stderr.write("Error: unstable vm has already been created and I can't find a postinstalled snapshot, this is an inconsistante state, I don't know what to do, abort.\n")
@@ -54,9 +54,9 @@ def main():
         sys.exit(1)
 
     with debug_message("Getting yunohost version"):
-        v.snapshot_restore("unstable", "postinstalled")
-        with settings(host_string=v.user_hostname_port(vm_name="unstable"),
-                      key_filename=v.keyfile(vm_name="unstable"),
+        v.snapshot_restore("stretch-unstable", "postinstalled")
+        with settings(host_string=v.user_hostname_port(vm_name="stretch-unstable"),
+                      key_filename=v.keyfile(vm_name="stretch-unstable"),
                       disable_known_hosts=True):
             yunohost_version = json.loads(sudo("yunohost --version --output-as json"))
 
@@ -77,12 +77,12 @@ def main():
             if not test_function.startswith("test_"):
                 continue
 
-            v.snapshot_restore("unstable", "postinstalled")
+            v.snapshot_restore("stretch-unstable", "postinstalled")
             sys.stdout.write("%s.%s...\r" % (test.__name__, test_function))
             sys.stdout.flush()
             try:
-                with settings(host_string=v.user_hostname_port(vm_name="unstable"),
-                              key_filename=v.keyfile(vm_name="unstable"),
+                with settings(host_string=v.user_hostname_port(vm_name="stretch-unstable"),
+                              key_filename=v.keyfile(vm_name="stretch-unstable"),
                               disable_known_hosts=True):
                     getattr(test, test_function)()
             except Exception as e:
