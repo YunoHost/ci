@@ -4,6 +4,7 @@ import json
 import vagrant
 import traceback
 from contextlib import contextmanager
+from subprocess import CalledProcessError
 
 from fabric.api import settings, sudo
 
@@ -32,7 +33,22 @@ def main():
 
     if starting_state == "not_created":
         with debug_message("Unstable vm not created, vagrant up-ing it"):
-            v.up(vm_name="stretch-unstable")
+            try:
+                v.up(vm_name="stretch-unstable")
+            except CalledProcessError:
+                try:
+                    # sometime you need to up it twice because vagrant -_-'
+                    v.up(vm_name="stretch-unstable")
+                except:
+                    pass
+                try:
+                    v.up(vm_name="stretch-unstable")
+                except:
+                    pass
+
+        # reboot vm because of this annoying locked dpkg bug
+        v.halt(vm_name="stretch-unstable")
+        v.up(vm_name="stretch-unstable")
 
         with debug_message("unstable vm created for the first time, starting postinstall"):
             with settings(host_string=v.user_hostname_port(vm_name="stretch-unstable"),
