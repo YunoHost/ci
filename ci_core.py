@@ -54,10 +54,17 @@ def main():
             with settings(host_string=v.user_hostname_port(vm_name="stretch-unstable"),
                           key_filename=v.keyfile(vm_name="stretch-unstable"),
                           disable_known_hosts=True):
+                # let's make it work in stable first
+                sudo("echo 'deb http://forge.yunohost.org/debian/ stretch stable' > /etc/apt/sources.list.d/yunohost.list")
+
+                # restart everything because they are often shutdown for whatever reason
+                sudo("systemctl restart slapd")
+                sudo("systemctl restart nginx")
+                sudo("systemctl restart yunohost-api")
                 sudo("apt-get update")
                 sudo("DEBIAN_FRONTEND='noninteractive' apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade -qq")
-                sudo("yunohost tools postinstall -d ynh.local -p ynh")
-                sudo("yunohost user create johndoe -f John -l Doe -m john.doe@ynh.local -q 0 -p ynh --admin-password ynh")
+                sudo("yunohost tools postinstall -d ynh.local -p ynhynhynh")
+                sudo("yunohost user create johndoe -f John -l Doe -m john.doe@ynh.local -q 0 -p ynhynhynh --admin-password ynhynhynh")
 
         with debug_message("Halting vm to do a snapshot"):
             v.halt("stretch-unstable")
