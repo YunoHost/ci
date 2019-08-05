@@ -10,6 +10,7 @@ from fabric.api import settings, sudo
 
 VAGRANTFILE_VERSION = "88ff9f40f30c132bfb482c057050f5bdcf37d379"
 
+
 @contextmanager
 def debug_message(first, second="done"):
     sys.stdout.write(first)
@@ -59,7 +60,6 @@ def main():
                       key_filename=v.keyfile(vm_name="stretch-unstable"),
                       disable_known_hosts=True):
             yunohost_version = json.loads(sudo("yunohost --version --output-as json"))
-
 
     for test in os.listdir("tests"):
         # only handle test_*.py files
